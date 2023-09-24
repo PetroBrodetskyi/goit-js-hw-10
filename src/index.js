@@ -4,6 +4,8 @@ import SlimSelect from 'slim-select'
 import 'slim-select/dist/slimselect.css';
 import "./css/styles.css"
 
+let firstLoade = true;
+
 const ref = {
     selectMenu: document.querySelector('.breed-select'),
     catInfo: document.querySelector('.cat-info'),
@@ -29,14 +31,18 @@ fetchBreeds()
         select: '.breed-select',
         data: arrBreedsId
     });
+    ref.selectMenu.classList.remove('is-hidden')
 })
 .catch(onFetchError);
 
 document.querySelector('.breed-select').addEventListener('change', onSelectBreed);
 
 function onSelectBreed(event) {
+    if (firstLoade) {
+        return (firstLoade = false);
+    }
+
     loader.classList.replace('is-hidden', 'loader');
-    
     catInfo.classList.add('is-hidden');
 
     const breedId = event.currentTarget.value;
@@ -48,6 +54,7 @@ function onSelectBreed(event) {
         
         catInfo.innerHTML = `<div class="box-img"><img src="${url}" alt="${breeds[0].name}" width="400"/></div><div class="box"><h1>${breeds[0].name}</h1><p>${breeds[0].description}</p><p><b>Temperament:</b> ${breeds[0].temperament}</p></div>`
         catInfo.classList.remove('is-hidden');
+        
     })
     .catch(onFetchError);
 }
